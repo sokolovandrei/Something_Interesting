@@ -13,16 +13,16 @@ import requests
 from netmiko import ConnectHandler, NetMikoAuthenticationException
 from pprint import pprint
 
-user = input('Введите username: ')
-password = getpass.getpass('Введите password: ')
-ip_addr = input('Введите subscriber ip address: ')
+user = input('Input username: ')
+password = getpass.getpass('Input password: ')
+ip_addr = input('Input subscriber ip address: ')
 
 try:
     if ipaddress.ip_address(ip_addr):
         pass
 except ValueError as error:
     print(error)
-    sys.exit('ip address введен некорректно!')
+    sys.exit('ip address is incorrect!')
 
 device_params = [{
     'device_type': 'cisco_xr',
@@ -79,11 +79,11 @@ def check_fttx_subscribers(device_params):
                             MSISDN_HEX = msisdn_line
                             MSISDN = bytearray.fromhex(MSISDN_HEX).decode()
                     else:
-                        sys.exit('Для данного адреса информация недоступна')
+                        sys.exit('There is no info for that ip address')
             return MSISDN
         except NetMikoAuthenticationException as error:
              print(error)
-             print('Учетные данные введены некорректно!')
+             print('Credentials are incorrect!')
              break
 
 
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     else:
         try:
             if not check_fttx_subscribers(device_params):
-                print('ip address {} не существует или сессия неактивна'.format(ip_addr))
+                print('ip address {}  does not exist or session is inactive'.format(ip_addr))
         except EOFError:
-            print('Попробуйте еще раз')
+            print('Try again')
 
